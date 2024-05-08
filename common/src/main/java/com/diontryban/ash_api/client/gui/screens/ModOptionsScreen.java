@@ -21,9 +21,11 @@ package com.diontryban.ash_api.client.gui.screens;
 
 import com.diontryban.ash_api.options.ModOptions;
 import com.diontryban.ash_api.options.ModOptionsManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
+import net.minecraft.client.gui.screens.OptionsSubScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -37,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>See also {@link ModOptionsScreenRegistry}.</p>
  */
 @ApiStatus.AvailableSince("20.2.0-beta")
-public abstract class ModOptionsScreen<T extends ModOptions> extends Screen {
+public abstract class ModOptionsScreen<T extends ModOptions> extends OptionsSubScreen {
     @ApiStatus.AvailableSince("20.2.0-beta")
     protected final Screen parent;
     @ApiStatus.AvailableSince("20.2.0-beta")
@@ -47,30 +49,35 @@ public abstract class ModOptionsScreen<T extends ModOptions> extends Screen {
 
     @ApiStatus.AvailableSince("20.2.0-beta")
     public ModOptionsScreen(@NotNull Component title, @NotNull ModOptionsManager<T> options, Screen parent) {
-        super(title);
+        super(parent, Minecraft.getInstance().options, title);
         this.options = options;
         this.parent = parent;
     }
+
+    @ApiStatus.AvailableSince("20.2.0-beta")
+    protected abstract void addOptions();
 
     @Override
     protected void init() {
         if (minecraft == null) { return; }
 
+        this.layout.addTitleHeader(this.title, this.font);
+
+        this.layout.addToFooter(Button.builder(CommonComponents.GUI_DONE, (p_333159_) -> {
+            this.onClose();
+        }).width(200).build());
+
         options.read();
-
-        list = new OptionsList(minecraft, width, height - 64, 32, 25);
+        list = new OptionsList(minecraft, this.width, this.height, this);
         addOptions();
-
-        addWidget(list);
-
-        addRenderableWidget(Button.builder(
-                CommonComponents.GUI_DONE,
-                button -> minecraft.setScreen(parent)
-        ).bounds(width / 2 - 100, height - 27, 200, 20).build());
+        addRenderableWidget(list);
     }
 
-    @ApiStatus.AvailableSince("20.2.0-beta")
-    protected abstract void addOptions();
+    @Override
+    protected void repositionElements() {
+        super.repositionElements();
+        this.list.updateSize(this.width, this.layout);
+    }
 
     @Override
     public void removed() {
@@ -82,17 +89,5 @@ public abstract class ModOptionsScreen<T extends ModOptions> extends Screen {
         if (minecraft != null) {
             minecraft.setScreen(parent);
         }
-    }
-
-    @Override
-    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
-        list.render(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, 16777215);
-    }
-
-    @Override
-    public void renderBackground(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        renderDirtBackground(graphics);
     }
 }

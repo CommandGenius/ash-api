@@ -20,8 +20,8 @@
 package com.diontryban.ash_api.client.event;
 
 import net.minecraft.client.Minecraft;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TickEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,19 +29,11 @@ import org.jetbrains.annotations.NotNull;
 public final class ClientTickEventsNeoForge extends ClientTickEvents {
     @Override
     protected void registerStartImpl(@NotNull StartCallback callback) {
-        NeoForge.EVENT_BUS.<TickEvent.ClientTickEvent>addListener(event -> {
-            if (event.phase == TickEvent.Phase.START) {
-                callback.startClientTick(Minecraft.getInstance());
-            }
-        });
+        NeoForge.EVENT_BUS.<ClientTickEvent.Pre>addListener(event -> callback.startClientTick(Minecraft.getInstance()));
     }
 
     @Override
     protected void registerEndImpl(@NotNull EndCallback callback) {
-        NeoForge.EVENT_BUS.<TickEvent.ClientTickEvent>addListener(event -> {
-            if (event.phase == TickEvent.Phase.END) {
-                callback.endClientTick(Minecraft.getInstance());
-            }
-        });
+        NeoForge.EVENT_BUS.<ClientTickEvent.Post>addListener(event -> callback.endClientTick(Minecraft.getInstance()));
     }
 }

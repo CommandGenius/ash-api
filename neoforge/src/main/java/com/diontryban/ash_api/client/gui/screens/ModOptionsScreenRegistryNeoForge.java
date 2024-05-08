@@ -23,9 +23,11 @@ import com.diontryban.ash_api.options.ModOptions;
 import com.diontryban.ash_api.options.ModOptionsManager;
 import net.minecraft.client.gui.screens.Screen;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.client.ConfigScreenHandler;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 @ApiStatus.Internal
 public final class ModOptionsScreenRegistryNeoForge extends ModOptionsScreenRegistry {
@@ -37,10 +39,8 @@ public final class ModOptionsScreenRegistryNeoForge extends ModOptionsScreenRegi
         ModList.get().getModContainerById(options.getModId())
                 .orElseThrow(() -> new RuntimeException("Attempted to register ModOptionsScreen for nonexistent mod: " + options.getModId()))
                 .registerExtensionPoint(
-                        ConfigScreenHandler.ConfigScreenFactory.class,
-                        () -> new ConfigScreenHandler.ConfigScreenFactory(
-                                (minecraft, screen) -> factory.create(options, screen)
-                        )
+                        IConfigScreenFactory.class,
+                        (Supplier<IConfigScreenFactory>) () -> (mc, screen) -> factory.create(options, screen)
                 );
     }
 }
