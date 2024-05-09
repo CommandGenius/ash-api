@@ -1,5 +1,5 @@
 # Changelog
-## v20.6.0
+## v20.6.0-beta
 - Updated to MC 1.20.6
 
 ## v20.4.0
