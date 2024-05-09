@@ -1,3 +1,6 @@
+## v20.6.2-beta
+- Fix jar file for Forge build. Forge no longer re-obfuscates its jars.
+
 ## v20.6.1-beta
 - Fix ModOptionsScreen on 1.20.6.
 
