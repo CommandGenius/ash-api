@@ -59,13 +59,9 @@ public abstract class ModOptionsScreen<T extends ModOptions> extends OptionsSubS
 
     @Override
     protected void init() {
+        super.init();
+
         if (minecraft == null) { return; }
-
-        this.layout.addTitleHeader(this.title, this.font);
-
-        this.layout.addToFooter(Button.builder(CommonComponents.GUI_DONE, (p_333159_) -> {
-            this.onClose();
-        }).width(200).build());
 
         options.read();
         list = new OptionsList(minecraft, this.width, this.height, this);
