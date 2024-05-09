@@ -59,14 +59,14 @@ public abstract class ModOptionsScreen<T extends ModOptions> extends OptionsSubS
 
     @Override
     protected void init() {
-        super.init();
-
         if (minecraft == null) { return; }
 
         options.read();
         list = new OptionsList(minecraft, this.width, this.height, this);
         addOptions();
         addRenderableWidget(list);
+
+        super.init();
     }
 
     @Override

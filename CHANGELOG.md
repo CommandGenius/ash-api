@@ -1,4 +1,7 @@
 # Changelog
+## v20.6.1-beta
+- Fix ModOptionsScreen on 1.20.6.
+
 ## v20.6.0-beta
 - Updated to MC 1.20.6
 
