@@ -25,7 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
-import net.minecraft.client.gui.screens.OptionsSubScreen;
+import net.minecraft.client.gui.screens.options.OptionsSubScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -62,7 +62,7 @@ public abstract class ModOptionsScreen<T extends ModOptions> extends OptionsSubS
         if (minecraft == null) { return; }
 
         options.read();
-        list = new OptionsList(minecraft, this.width, this.height, this);
+        list = new OptionsList(minecraft, this.width, this);
         addOptions();
         addRenderableWidget(list);
 
